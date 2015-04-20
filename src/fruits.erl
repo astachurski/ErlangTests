@@ -23,5 +23,8 @@ fruitByColor(Color) -> lists:filter(fun({_,C}) -> C == Color end, fruit()).
 
 extractFruit() -> lists:map(fun({F,_}) -> F end, fruit()).
 
+cikaka() ->
+	io:format("pupu~p",[bibibi]).
+
 
 

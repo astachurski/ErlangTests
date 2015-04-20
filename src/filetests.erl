@@ -25,8 +25,7 @@ get_chunked_serial(Fname) ->
   ChunkSize = calculate_chunk_size(Fname),
   {ok, Count, Rem} = calculate_chunks_count_and_rem(Fname, ChunkSize),
   R = get_chunk_list(Fname, ChunkSize, Count, []),
-  ?debugFmt("\nremainder was~p\n", [Rem]),
-  if Rem > 0 -> %[R | element(2, get_last_chunk(Fname, ChunkSize))]
+  if Rem > 0 ->
     lists:append(R, [element(2, get_last_chunk(Fname, ChunkSize))])
   end.
 
@@ -38,12 +37,12 @@ get_chunk_list(Fname, ChunkSize, Count, Acc) ->
 
 
 assemble_from_chunks(BinaryChunkList, OutputFName) ->
-  {ok, Device} = file:open(OutputFName, [append, binary]),
+  {ok, Device} = file:open(OutputFName, [dhbappend, binary]),
   lists:foreach(fun(Bytes) -> file:write(Device, Bytes) end, BinaryChunkList),
   file:close(Device).
 
 
-get_chunked_test() ->
+chunk_dechunk_round_trip1_test() ->
   Res = get_chunked_serial(?TESTBINFILE),
   %?debugFmt("\n~p\n", [Res]),
   assemble_from_chunks(Res, "src/BinKupanka.exe").
